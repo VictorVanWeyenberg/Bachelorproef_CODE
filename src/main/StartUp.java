@@ -7,13 +7,16 @@ package main;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import beads.BeadsTemplate;
+import io.MeasurementWriter;
 import jsyn.JSynTemplate;
 import measure.Measurer;
 import measure.Parameter;
+import net.beadsproject.beads.core.io.JavaSoundAudioIO;
 
 /**
  * @author Reznov
@@ -21,6 +24,7 @@ import measure.Parameter;
 public class StartUp {
 
     private final static List<Parameter> parameters = new ArrayList<>();
+    private final Scanner input = new Scanner(System.in);
 
     static {
         int voices, voicesToEQandComp, effects, voicesToEffects;
@@ -47,13 +51,12 @@ public class StartUp {
     public static void main(String[] args) throws InterruptedException {
         new StartUp();
         // System.out.println(System.getProperty("java.library.path"));
-        //parameters.stream().filter(parameter -> parameter.getVoices() == 4).forEach(System.out::println);
+        // parameters.stream().filter(parameter -> parameter.getVoices() == 4).forEach(System.out::println);
         // JavaSoundAudioIO.printMixerInfo();
     }
 
     public StartUp() throws InterruptedException {
-        Set<Thread> firstSet = Thread.getAllStackTraces().keySet();
-        firstSet.stream().map(Thread::getName).filter(thread -> thread.equals("Thread-0")).forEach(System.out::println);
+        // askForNewMeasurement();
         for (Template benchmark : templates) {
             for (Parameter parameter : parameters) {
                 benchmark.reset();
@@ -67,5 +70,17 @@ public class StartUp {
                 benchmark.tearDown();
             }
         }
+    }
+
+    private void askForNewMeasurement() {
+        System.out.print("Delete old measurement? [Y/N]: ");
+        String answer = null;
+        while (answer != "Y" || answer != "N") {
+            answer = input.nextLine();
+        }
+        if (answer.equals("Y")) {
+            MeasurementWriter.reset();
+        }
+        System.out.println("yep");
     }
 }
