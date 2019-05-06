@@ -106,6 +106,8 @@ public class JSynTemplate extends Template<SawtoothOscillator, FilterLowPass, En
         });
         synth.remove(lineOut);
 
+        reset();
+
         System.gc();
     }
 
