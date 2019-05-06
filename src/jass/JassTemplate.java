@@ -1,14 +1,16 @@
 package jass;
 
+import jass.render.SourcePlayer;
 import main.Template;
-import jass.
 
 
-public class JassTemplate extends Template<Voice, Equalizer, Compressor, Effect> {
+/*public class JassTemplate extends Template<Voice, Equalizer, Compressor, Effect> {
+
+	private SourcePlayer sourcePlayer;
 	
 	public JassTemplate() {
 		super("JASS");
-		Sour
+		sourcePlayer = new SourcePlayer(64, 44100);
 	}
 
-}
+}*/

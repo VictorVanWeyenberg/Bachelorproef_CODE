@@ -29,7 +29,6 @@ public class BeadsTemplate extends Template<WavePlayer, LPRezFilter, Compressor,
 
     @Override
     public void setup(int voices, int voicesToEQAndComp, int effects, int voicesToEffects) {
-        System.out.println("SETUP");
         initLibrary();
         int i, j;
         for (i = 0; i < voices; i++) {
@@ -70,25 +69,20 @@ public class BeadsTemplate extends Template<WavePlayer, LPRezFilter, Compressor,
 
     @Override
     public void run() {
-        System.out.println("START");
         audioCtx.start();
     }
 
     @Override
     public void stop() {
-        System.out.println("STOP");
         audioCtx.stop();
     }
 
     @Override
     public void tearDown() {
-        System.out.println("TEAR DOWN");
         voices.forEach(voice -> audioCtx.out.removeAllConnections(voice));
         equalizers.forEach(equalizer -> audioCtx.out.removeAllConnections(equalizer));
         compressors.forEach(compressor -> audioCtx.out.removeAllConnections(compressor));
         effects.forEach(effect -> audioCtx.out.removeAllConnections(effect));
-        
-        reset();
         
         System.gc();
     }

@@ -7,11 +7,7 @@ package jsyn;
 
 import com.jsyn.JSyn;
 import com.jsyn.Synthesizer;
-import com.jsyn.unitgen.EnvelopeAttackDecay;
-import com.jsyn.unitgen.FilterLowPass;
-import com.jsyn.unitgen.InterpolatingDelay;
-import com.jsyn.unitgen.LineOut;
-import com.jsyn.unitgen.SawtoothOscillator;
+import com.jsyn.unitgen.*;
 import main.Template;
 
 /**
@@ -78,12 +74,10 @@ public class JSynTemplate extends Template<SawtoothOscillator, FilterLowPass, En
     public void run() {
         synth.start();
         lineOut.start();
-        System.out.println("STARTED");
     }
 
     @Override
     public void stop() {
-        System.out.println("STOPPING");
         lineOut.stop();
         synth.stop();
     }
@@ -111,8 +105,6 @@ public class JSynTemplate extends Template<SawtoothOscillator, FilterLowPass, En
             synth.remove(effect);
         });
         synth.remove(lineOut);
-        
-        reset();
 
         System.gc();
     }
