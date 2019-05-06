@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="beads-io">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/beads-io.jar!/" />
+      <root url="jar://$PROJECT_DIR$/beads.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jsyn-20171016.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
