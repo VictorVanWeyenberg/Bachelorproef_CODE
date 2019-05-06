@@ -83,6 +83,8 @@ public class BeadsTemplate extends Template<WavePlayer, LPRezFilter, Compressor,
         equalizers.forEach(equalizer -> audioCtx.out.removeAllConnections(equalizer));
         compressors.forEach(compressor -> audioCtx.out.removeAllConnections(compressor));
         effects.forEach(effect -> audioCtx.out.removeAllConnections(effect));
+
+        reset();
         
         System.gc();
     }
@@ -90,7 +92,7 @@ public class BeadsTemplate extends Template<WavePlayer, LPRezFilter, Compressor,
     @Override
     protected void initLibrary() {
         JavaSoundAudioIO aio = new JavaSoundAudioIO();
-        aio.selectMixer(3);
+        aio.selectMixer(2);
         audioCtx = new AudioContext(aio);
     }
 
