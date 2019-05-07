@@ -74,6 +74,7 @@ public class StartUp {
             for (Parameter parameter : parameters) {
                 template.reset();
                 template.setup(parameter.getVoices(), parameter.getVoicesToEQandComp(), parameter.getEffects(), parameter.getVoicesToEffects());
+                System.out.println(String.format("%s: Running parameters %s...", template.getName(), parameter));
                 TimeUnit.MILLISECONDS.sleep(1000);
                 template.run();
                 Measurer.measureTop(parameters.indexOf(parameter), parameter);
