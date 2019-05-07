@@ -5,6 +5,8 @@
  */
 package main;
 
+import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,7 +15,9 @@ import java.util.concurrent.TimeUnit;
 
 import beads.BeadsTemplate;
 import io.MeasurementWriter;
+import jass.JassTemplate;
 import jsyn.JSynTemplate;
+import measure.Measurement;
 import measure.Measurer;
 import measure.Parameter;
 import net.beadsproject.beads.core.io.JavaSoundAudioIO;
@@ -28,7 +32,7 @@ public class StartUp {
 
     static {
         int voices, voicesToEQandComp, effects, voicesToEffects;
-        for (voices = 4; voices <= 150; voices += 2) {
+        for (voices = 4; voices <= 100; voices += 2) {
             for (voicesToEQandComp = voices / 2; voicesToEQandComp <= voices; voicesToEQandComp++) {
                 for (effects = 0; effects <= 5; effects++) {
                     if (effects > 0) {
@@ -44,43 +48,42 @@ public class StartUp {
     }
 
     private static Template[] templates = new Template[]{
-            new BeadsTemplate(),
+            // new BeadsTemplate(),
             new JSynTemplate(),
+            // new JassTemplate(),
     };
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) throws InterruptedException, IOException {
         new StartUp();
         // System.out.println(System.getProperty("java.library.path"));
         // parameters.stream().filter(parameter -> parameter.getVoices() == 4).forEach(System.out::println);
         // JavaSoundAudioIO.printMixerInfo();
+        // System.out.println(parameters.size());
     }
 
-    public StartUp() throws InterruptedException {
-        // askForNewMeasurement();
-        for (Template benchmark : templates) {
+    public StartUp() throws InterruptedException, IOException {
+        for (Template template : templates) {
+            int test = 0;
+            MeasurementWriter.open(template.getName());
             for (Parameter parameter : parameters) {
-                benchmark.reset();
-                benchmark.setup(parameter.getVoices(), parameter.getVoicesToEQandComp(), parameter.getEffects(), parameter.getVoicesToEffects());
-                System.out.printf("%s: Measuring case %s.%n", benchmark.getName(), parameter);
-                TimeUnit.SECONDS.sleep(1);
-                benchmark.run();
-                Measurer.measure(parameter);
-                TimeUnit.SECONDS.sleep(2);
-                benchmark.stop();
-                benchmark.tearDown();
+                if (test == 5) {
+                    break;
+                }
+                template.reset();
+                template.setup(parameter.getVoices(), parameter.getVoicesToEQandComp(), parameter.getEffects(), parameter.getVoicesToEffects());
+                TimeUnit.MILLISECONDS.sleep(10);
+                template.run();
+                // Measurer.measureTop(parameters.indexOf(parameter), parameter);
+                Measurer.measureSigar(parameters.indexOf(parameter), parameter);
+                template.stop();
+                template.tearDown();
+                test++;
             }
+            MeasurementWriter.flush();
         }
     }
 
-    private void askForNewMeasurement() {
-        System.out.print("Delete old measurement? [Y/N]: ");
-        String answer = null;
-        while (answer != "Y" || answer != "N") {
-            answer = input.nextLine();
-        }
-        if (answer.equals("Y")) {
-            MeasurementWriter.reset();
-        }
-        System.out.println("yep");
+    public static final int getPID() {
+        return Integer.valueOf(ManagementFactory.getRuntimeMXBean().getName().split("@")[0]);
     }
 }
