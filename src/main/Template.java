@@ -5,6 +5,8 @@
  */
 package main;
 
+import jass.engine.SinkIsFullException;
+
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -37,6 +39,10 @@ public abstract class Template<Voice, Equalizer, Compressor, Effect> {
         equalizers.clear();
         compressors.clear();
         effects.clear();
+    }
+
+    public boolean usesCompressors() {
+        return !this.compressors.isEmpty();
     }
     
     public String getName() {
