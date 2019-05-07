@@ -47,10 +47,10 @@ public class BeadsTemplate extends Template<WavePlayer, LPRezFilter, Compressor,
                 UGen previousModule;
 
                 if (j == 0) {
-                    if (compressors.isEmpty()) {
-                        previousModule = this.voices.get(i);
-                    } else {
+                    if (usesCompressors()) {
                         previousModule = this.compressors.get(i);
+                    } else {
+                        previousModule = this.voices.get(i);
                     }
                     this.effects.get(i).addInput(previousModule);
                 } else {

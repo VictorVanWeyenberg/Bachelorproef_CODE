@@ -48,10 +48,10 @@ public class JSynTemplate extends Template<SawtoothOscillator, FilterLowPass, En
                 synth.add(this.effects.get(i * effects + j));
 
                 if (j == 0) {
-                    if (this.compressors.isEmpty()) {
-                        this.voices.get(i).output.connect(this.effects.get(i * effects + j).input);
-                    } else {
+                    if (usesCompressors()) {
                         this.compressors.get(i).output.connect(this.effects.get(i * effects + j).input);
+                    } else {
+                        this.voices.get(i).output.connect(this.effects.get(i * effects + j).input);
                     }
                 } else {
                     this.effects.get(i * effects + j - 1).output.connect(this.effects.get(i * effects + j).input);
