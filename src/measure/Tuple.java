@@ -14,7 +14,7 @@ public class Tuple {
         for (int i = 1; i < data.length; i++) {
             tupleWriter.append(", ").append(data[i]);
         }
-        return tupleWriter.append("\n").toString();
+        return tupleWriter.toString();
     }
 
 }
