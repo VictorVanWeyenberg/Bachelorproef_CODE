@@ -31,8 +31,8 @@ public class StartUp {
     private final Scanner input = new Scanner(System.in);
 
     static {
-        int voices, voicesToEQandComp, effects, voicesToEffects;
-        for (voices = 4; voices <= 100; voices += 2) {
+        /*int voices, voicesToEQandComp, effects, voicesToEffects;
+        for (voices = 4; voices <= 150; voices += 2) {
             for (voicesToEQandComp = voices / 2; voicesToEQandComp <= voices; voicesToEQandComp++) {
                 for (effects = 0; effects <= 5; effects++) {
                     if (effects > 0) {
@@ -44,13 +44,19 @@ public class StartUp {
                     }
                 }
             }
-        }
+        }*/
+        parameters.add(new Parameter(4, 4, 0, 0));
+        parameters.add(new Parameter(10, 10, 1, 5));
+        parameters.add(new Parameter(25, 25, 1, 10));
+        parameters.add(new Parameter(40, 40, 3, 15));
+        parameters.add(new Parameter(50, 50, 5, 20));
+        parameters.add(new Parameter(150, 150, 0, 0));
     }
 
     private static Template[] templates = new Template[]{
-            // new BeadsTemplate(),
+            new BeadsTemplate(),
+            new JassTemplate(),
             new JSynTemplate(),
-            // new JassTemplate(),
     };
 
     public static void main(String[] args) throws InterruptedException, IOException {
@@ -66,18 +72,14 @@ public class StartUp {
             int test = 0;
             MeasurementWriter.open(template.getName());
             for (Parameter parameter : parameters) {
-                if (test == 5) {
-                    break;
-                }
                 template.reset();
                 template.setup(parameter.getVoices(), parameter.getVoicesToEQandComp(), parameter.getEffects(), parameter.getVoicesToEffects());
-                TimeUnit.MILLISECONDS.sleep(10);
+                TimeUnit.MILLISECONDS.sleep(1000);
                 template.run();
-                // Measurer.measureTop(parameters.indexOf(parameter), parameter);
-                Measurer.measureSigar(parameters.indexOf(parameter), parameter);
+                Measurer.measureTop(parameters.indexOf(parameter), parameter);
+                // Measurer.measureSigar(parameters.indexOf(parameter), parameter);
                 template.stop();
                 template.tearDown();
-                test++;
             }
             MeasurementWriter.flush();
         }

@@ -18,7 +18,7 @@ public class Measurer {
     private static CpuPerc cpuMeasurer;
     private static Mem memMeasurer;
 
-    private static final String BASH_COMMAND = "top -b -n50 | grep %d | awk '{ print $9 \" \" $10 }'";
+    private static final String BASH_COMMAND = "top -b -n1 -d,01 | grep 4338 | awk '{ if ($9 != \"0,0\") print $9 \" \" $10 }'";
 
     private static double getCpuLoadPercentage() {
         if (cpuMeasurer == null) {
@@ -44,10 +44,10 @@ public class Measurer {
 
     public static void measureSigar(int ID, Parameter parameter) throws InterruptedException {
         for (int index = 0; index < 50; index++) {
-            TimeUnit.MILLISECONDS.sleep(10);
             Measurement measurement = new Measurement(ID, index, parameter, getCpuLoadPercentage(), getMemoryLoadPercentae());
             MeasurementWriter.write(measurement);
             System.out.println(measurement);
+            TimeUnit.MILLISECONDS.sleep(10);
         }
     }
 
@@ -62,11 +62,21 @@ public class Measurer {
             output = reader.readLine();
             reader.close();
             process.waitFor();
-            double cpuLoad = Float.valueOf(output.replaceAll(",", ".").split(" ")[0]);
-            double memLoad = Float.valueOf(output.replaceAll(",", ".").split(" ")[1]);
-            Measurement measurement = new Measurement(ID, index, parameter, cpuLoad, memLoad);
-            MeasurementWriter.write(measurement);
-            index++;
+            double cpuLoad = 0;
+            try {
+                cpuLoad = Float.valueOf(output.replaceAll(",", ".").split(" ")[0]);
+                if (cpuLoad > 0) {
+                    double memLoad = Float.valueOf(output.replaceAll(",", ".").split(" ")[1]);
+                    Measurement measurement = new Measurement(ID, index, parameter, cpuLoad, memLoad);
+                    MeasurementWriter.write(measurement);
+                    index++;
+                    System.out.println(ID + " " + index);
+                }
+            } catch (NullPointerException ex) {
+
+            } catch (NumberFormatException ex) {
+
+            }
         }
     }
 
