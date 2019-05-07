@@ -70,7 +70,6 @@ public class Measurer {
                     Measurement measurement = new Measurement(ID, index, parameter, cpuLoad, memLoad);
                     MeasurementWriter.write(measurement);
                     index++;
-                    System.out.println(ID + " " + index);
                 }
             } catch (NullPointerException ex) {
 
